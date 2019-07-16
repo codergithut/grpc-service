@@ -142,22 +142,9 @@ public class BeanConfig {
         return mulDataSourceManage;
     }
 
-    /**
-     * 查询引擎注册器
-     * @return
-     */
     @Bean
-    @Primary
-    public DataSearchServerManage getDataSearchServerManage() {
-        DataSearchServerManage dataSearchServerManage = new DataSearchServerManage();
-        DataSearchServer mysqlDataSearchServer = new CommonDataSearchServer();
-        mysqlDataSearchServer.setDataSource(getDruidDataSource());
-        dataSearchServerManage.registerDataSearchServer("mysql", mysqlDataSearchServer);
-        DataSearchServer postgre = new CommonDataSearchServer();
-        dataSearchServerManage.registerDataSearchServer("postgre", postgre);
-        CommonDataSearchServer hiveDataSearchServer = new CommonDataSearchServer();
-        dataSearchServerManage.registerDataSearchServer("hive", hiveDataSearchServer);
-        return dataSearchServerManage;
+    public DataSearchServer getCommonDataSearchServer() {
+        return new CommonDataSearchServer();
     }
 
 

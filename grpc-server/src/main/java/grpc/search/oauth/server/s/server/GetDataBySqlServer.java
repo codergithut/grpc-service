@@ -60,12 +60,6 @@ public class GetDataBySqlServer
     private int timeout;
 
     /**
-     * 底层数据获取
-     */
-    @Autowired
-    private DataSearchServerManage dataSearchServerManage;
-
-    /**
      * 校验请求数据合法性
      */
     @Autowired
@@ -86,6 +80,9 @@ public class GetDataBySqlServer
     @Autowired
     private MulDataSourceManage mulDataSourceManage;
 
+    @Autowired
+    private DataSearchServer dataSearchServer;
+
     /**
      * 获取数据库数据
      * @param request
@@ -98,13 +95,11 @@ public class GetDataBySqlServer
 
         String dataSourceName = request.getDataSourceName();
 
-        DataSearchServer dataSearchServer = dataSearchServerManage.getDataSearchSeverByType
-                (mulDataSourceManage.getTypeByName(dataSourceName));
 
         if(dataSearchServer == null) {
-            systemLogServer.error("can not found type");
+            systemLogServer.error("can not found service");
             messageCode = ResultCode.SEARCH_TYPE_UNFOUND;
-            writeResponseMessage(responseObserver, "can not foud type", messageCode, request.getSql());
+            writeResponseMessage(responseObserver, "can not found service", messageCode, request.getSql());
             return ;
         }
 
