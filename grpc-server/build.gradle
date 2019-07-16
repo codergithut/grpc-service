@@ -6,6 +6,7 @@ group 'grpc-service'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'distribution'
 
 sourceCompatibility = 1.8
 
@@ -14,9 +15,11 @@ repositories {
 }
 
 dependencies {
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
 
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.1.2'
     compile group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'
 
@@ -36,33 +39,83 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
 }
 
-
-install {
-    repositories.mavenInstaller {
-        pom.version =  project.version
-        pom.artifactId = 'grpc-server'
-        pom.groupId = project.group
-    }
+task createDirs() {
+    file('build/package').mkdirs()
 }
 
-task "create-dirs"<<
-        {
-            sourceSets*.java.srcDirs*.each {it.mkdirs() }
-            sourceSets*.resources.srcDirs*.each {it.mkdirs() }
+task createLogs() {
+    file('build/package/logs').mkdirs()
+}
+
+task copyDeps(type: Copy) {
+    from(configurations.compile)
+    into('build/package/lib')
+}
+
+task copyLibs(type: Copy, dependsOn: 'jar') {
+    from('build/libs')
+    into('build/package/lib')
+}
+
+task copyConfig(type: Copy) {
+    from('src/main/resources')
+    into('build/package/bin/config')
+}
+
+task copyBin(type: Copy) {
+    from('bin')
+    into('build/package/bin')
+}
+
+
+task copy(dependsOn: [
+        'createDirs',
+        'createLogs',
+        'copyDeps',
+        'copyLibs',
+        'copyConfig',
+        'copyBin'
+]) {
+}
+
+distributions {
+    main {
+        baseName = 'grpc-server'
+        contents {
+            from { 'build/package' }
         }
-
-task getHomeDir << {
-    println gradle.gradleHomeDir
-}
-
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Jar File Example',
-                'Implementation-Version': version,
-                'Main-Class': 'grpc.search.oauth.server.s.ServerApp'
     }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
+distZip.dependsOn 'copy'
+
+
+//install {
+//    repositories.mavenInstaller {
+//        pom.version =  project.version
+//        pom.artifactId = 'grpc-server'
+//        pom.groupId = project.group
+//    }
+//}
+
+//task "create-dirs"<<
+//        {
+//            sourceSets*.java.srcDirs*.each {it.mkdirs() }
+//            sourceSets*.resources.srcDirs*.each {it.mkdirs() }
+//        }
+//
+//task getHomeDir << {
+//    println gradle.gradleHomeDir
+//}
+//
+////create a single Jar with all dependencies
+//task fatJar(type: Jar) {
+//    manifest {
+//        attributes 'Implementation-Title': 'Gradle Jar File Example',
+//                'Implementation-Version': version,
+//                'Main-Class': 'grpc.search.oauth.server.s.ServerApp'
+//    }
+//    baseName = project.name + '-all'
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//    with jar
+//}
+

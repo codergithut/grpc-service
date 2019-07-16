@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
@@ -19,12 +21,19 @@ import java.util.Arrays;
 public class ResourceIsolate {
 
 
-    public static String getQueueName(String url) throws Exception {
+    public static String getQueueName(String queueMasterUrl, String queueSlaveUrl) throws Exception {
 
-        URL urlScheduler =
-                new URL(url);
+        URLConnection urlConnection;
 
-        URLConnection urlConnection = urlScheduler.openConnection();
+        urlConnection = getURLConnection(queueMasterUrl);
+
+        if(urlConnection == null) {
+            urlConnection = getURLConnection(queueSlaveUrl);
+        }
+
+        if(urlConnection == null) {
+            throw new Exception("queue service error");
+        }
 
         HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection;
 
@@ -122,14 +131,29 @@ public class ResourceIsolate {
         return list;
     }
 
-    public static Connection getConnection(HiveConnectinInfo hiveConnectinInfo, String queueUrl) {
+
+    private static URLConnection getURLConnection(String url) throws MalformedURLException {
+        URL urlScheduler =
+                new URL(url);
+        URLConnection urlConnection = null;
+
+        try {
+            urlConnection = urlScheduler.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            return urlConnection;
+        }
+    }
+
+    public static Connection getConnection(HiveConnectinInfo hiveConnectinInfo, String queueMasterUrl, String queueSlaveUrl) {
 
         String driverName = hiveConnectinInfo.getDriveName();
         String url = hiveConnectinInfo.getUrl();
 
         String queueName = "";
         try {
-            queueName = getQueueName(queueUrl);
+            queueName = getQueueName(queueMasterUrl, queueSlaveUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }

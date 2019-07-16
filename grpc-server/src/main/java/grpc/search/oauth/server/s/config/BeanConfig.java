@@ -28,7 +28,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 @EnableScheduling
-@PropertySource(value = { "classpath:config.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = { "file:config/config.properties" }, ignoreResourceNotFound = true)
 public class BeanConfig {
 
     /**
@@ -54,22 +54,6 @@ public class BeanConfig {
         return new MyServerInterceptor();
     }
 
-    @Value("${server.discoveryPort}")
-    private int discoveryPort;
-
-    @Value("${server.discoveryUrl}")
-    private String discoveryUrl;
-
-
-    @Bean
-    public ServiceLogServer getServiceLogServer() {
-        return new ServiceLogServerImpl();
-    }
-
-    @Bean
-    public SystemLogServer getSystemLogServer() {
-        return new SystemLogServerImpl();
-    }
 
     @Bean
     public Log getLog() {

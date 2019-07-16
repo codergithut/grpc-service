@@ -7,16 +7,16 @@ import grpc.search.oauth.server.s.grpc.mdoel.SqlRequest;
 import grpc.search.oauth.server.s.grpc.service.GetDataBySqlGrpc;
 import grpc.search.oauth.server.s.model.CacheModel;
 import grpc.search.oauth.server.s.model.SearchModeData;
-import grpc.search.oauth.server.s.model.ServiceLogModel;
 import grpc.search.oauth.server.s.grpc.mdoel.ServerReply;
 import grpc.search.oauth.server.s.util.HiveConnectinInfo;
 import grpc.search.oauth.server.s.util.ResourceIsolate;
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -28,8 +28,13 @@ import java.util.concurrent.TimeoutException;
 public class GetDataBySqlServer
         extends GetDataBySqlGrpc.GetDataBySqlImplBase {
 
-    @Value("${queue.url}")
-    private String queueUrl;
+    private static transient Logger logger = LoggerFactory.getLogger(GetDataBySqlServer.class);
+
+    @Value("${queue.slave.url}")
+    private String queueSlaveUrl;
+
+    @Value("${queue.master.url}")
+    private String queueMasterUrl;
 
     //缓存接口这里是LoadingCache，LoadingCache在缓存项不存在时可以自动加载缓存
     Cache<String,String> searchCache
@@ -65,17 +70,6 @@ public class GetDataBySqlServer
     @Autowired
     private VerifySqlRequest verifySqlRequest;
 
-    /**
-     * 业务日志收集服务
-     */
-    @Autowired
-    private ServiceLogServer serviceLogServer;
-
-    /**
-     * 系统日志收集服务
-     */
-    @Autowired
-    private SystemLogServer systemLogServer;
 
     @Autowired
     private MulDataSourceManage mulDataSourceManage;
@@ -97,7 +91,7 @@ public class GetDataBySqlServer
 
 
         if(dataSearchServer == null) {
-            systemLogServer.error("can not found service");
+            logger.error("can not found service");
             messageCode = ResultCode.SEARCH_TYPE_UNFOUND;
             writeResponseMessage(responseObserver, "can not found service", messageCode, request.getSql());
             return ;
@@ -115,20 +109,20 @@ public class GetDataBySqlServer
                 writeResponseMessage(responseObserver, "can not find connection", messageCode, request.getSql());
                 return ;
             }
-            dataSearchServer.setConnection(ResourceIsolate.getConnection(hiveConnectinInfo, queueUrl));
+            dataSearchServer.setConnection(ResourceIsolate.getConnection(hiveConnectinInfo, queueMasterUrl, queueSlaveUrl));
         }
 
 
         if(!verifySqlRequest.verifyTokenPermission(request)) {
             messageCode = ResultCode.AUTH_ERROR_CODE;
-            systemLogServer.error("Auth fail");
+            logger.error("Auth fail");
             writeResponseMessage(responseObserver, "verfiy fail", messageCode, request.getSql());
             return ;
         }
 
         if(!verifySqlRequest.verifySqlPermission(request)) {
             messageCode = ResultCode.AUTH_ERROR_CODE;
-            systemLogServer.error("Data Auth fail");
+            logger.error("Data Auth fail");
             writeResponseMessage(responseObserver, "Data verfiy fail", messageCode, request.getSql());
             return ;
         }
@@ -144,7 +138,7 @@ public class GetDataBySqlServer
         if(cacheModel.isReadCache()) {
             message = searchCache.getIfPresent(getSqlRequestParamSign(request));
             if(message != null) {
-                systemLogServer.info("read data from cache ...");
+                logger.info("read data from cache ...");
                 writeResponseMessage(responseObserver, message, messageCode, request.getSql());
                 return ;
             }
@@ -155,7 +149,7 @@ public class GetDataBySqlServer
          * 判断缓存是否命中
          */
         if(message == null) {
-            systemLogServer.info("read data from service ...");
+            logger.info("read data from service ...");
             searchModeData = dataSearchServer.getDataBySql(request.getSql());
         }
 
@@ -166,11 +160,11 @@ public class GetDataBySqlServer
              * 判断数据是否可以写入缓存
              */
             if(cacheModel.isWriteCache()) {
-                systemLogServer.info("write data to cache");
+                logger.info("write data to cache");
                 searchCache.put(getSqlRequestParamSign(request), message);
             }
         } catch (TimeoutException e) {
-            systemLogServer.warn("time out error");
+            logger.warn("time out error");
             e.printStackTrace();
             message = "time out error";
             messageCode = ResultCode.TIME_OUT_ERROR;
@@ -187,12 +181,6 @@ public class GetDataBySqlServer
     public void writeResponseMessage(StreamObserver<ServerReply> responseObserver,String message,
                                      int messageCode, String sql) {
         //todo 异步插入数据
-        ServiceLogModel serviceLogModel = new ServiceLogModel();
-        serviceLogModel
-                .bulidCode(messageCode)
-                .buildSearchTime(new Date().getTime())
-                .buildParam(sql);
-        serviceLogServer.saveServiceLogToService(serviceLogModel);
         //给客户端返回值
         ServerReply reply = ServerReply.getDefaultInstance().newBuilder()
                 .setMessage(message).setMessagecode(messageCode).build();
