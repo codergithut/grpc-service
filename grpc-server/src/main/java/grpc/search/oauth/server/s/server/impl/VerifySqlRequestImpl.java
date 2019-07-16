@@ -34,6 +34,9 @@ public class VerifySqlRequestImpl implements VerifySqlRequest {
 
     private final String CLIENTSEARCH = "select secret_key from auth_client where client_name = '";
 
+    /**
+     * 项目基础数据库
+     */
     @Autowired
     @Qualifier("mysqlDataSource")
     private DataSource dataSource;
@@ -41,8 +44,14 @@ public class VerifySqlRequestImpl implements VerifySqlRequest {
     @Autowired
     private CheckSqlPermissionStream checkSqlPermissionStream;
 
+    /**
+     * 白名单ip
+     */
     private final Set<String> receiveIps = new HashSet();
 
+    /**
+     * 认证token
+     */
     private final Map<String, Set<String>> tokens = new HashMap();
 
     /**

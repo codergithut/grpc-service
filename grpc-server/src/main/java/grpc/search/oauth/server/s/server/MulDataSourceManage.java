@@ -16,28 +16,52 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MulDataSourceManage {
 
+    /**
+     * 基础数据源
+     */
     private DataSource dataSource;
 
+    /**
+     * 锁，用于控制动态数据源
+     */
     private ReentrantLock lock  = new ReentrantLock();
 
+    /**
+     * 数据库列名和类型定义关联
+     */
     private Map<String, String> nameTypeRef = new ConcurrentHashMap<String, String>();
 
+    /**
+     * 数据列名和hive基础数据关联
+     */
     private Map<String, HiveConnectinInfo> connectionValue = new ConcurrentHashMap<>();
 
+    /**
+     * 数据列名和数据库源对应关联
+     */
     private Map<String, HikariDataSource> nameHiariDataSource = new ConcurrentHashMap<>();
 
     private final String sql = "SELECT * FROM docker.table_info where status = 1";
 
+    /**
+     * 初始化多数据源数据
+     */
     public void initDataSource() {
         getDataSourceInfo();
     }
 
+    /**
+     * 清理已有的多数据源数据
+     */
     private void cleanDataSource() {
         nameTypeRef.clear();
         connectionValue.clear();
         nameHiariDataSource.clear();
     }
 
+    /**
+     * 初始化多数据源数据
+     */
     private void getDataSourceInfo() {
         lock.lock();
         cleanDataSource();
@@ -86,6 +110,11 @@ public class MulDataSourceManage {
         }
     }
 
+    /**
+     * 根据名称获取数据库类型
+     * @param name
+     * @return
+     */
     public String getTypeByName(String name) {
         if(nameTypeRef.containsKey(name) || lock.isLocked()) {
             return nameTypeRef.get(name);
@@ -94,6 +123,11 @@ public class MulDataSourceManage {
         }
     }
 
+    /**
+     * 根据名称获取数据源
+     * @param name
+     * @return
+     */
     public HikariDataSource getHikariDataSourceByName(String name) {
         if(nameHiariDataSource.containsKey(name) || lock.isLocked()) {
             return nameHiariDataSource.get(name);
@@ -101,6 +135,11 @@ public class MulDataSourceManage {
         return null;
     }
 
+    /**
+     * 根据名称获取hive数据源信息
+     * @param name
+     * @return
+     */
     public HiveConnectinInfo getHiveConnectionInfoByName(String name) {
         if(connectionValue.containsKey(name) || lock.isLocked()) {
             return connectionValue.get(name);

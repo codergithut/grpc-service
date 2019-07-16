@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 /**
+ * 定时刷新多数据源配置
  * Created by tianjian on 2019/6/28.
  */
 @EnableScheduling

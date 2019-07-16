@@ -23,6 +23,12 @@ public class CheckIDESqlPermission implements CheckSqlPermission {
     private final String IDESEARCH = "select priv_value from ide as a where (a.tbl_name like '?%' or a.tbl_name = '?.*')" +
             " and a.role_id='#'";
 
+    /**
+     * 查询sql权限
+     * @param sqlSearchFields sql操作字段
+     * @param role_id 用户ID
+     * @return
+     */
     @Override
     public boolean checkSqlPermission(List<SqlSearchField> sqlSearchFields, String role_id) {
         PreparedStatement pstmt;

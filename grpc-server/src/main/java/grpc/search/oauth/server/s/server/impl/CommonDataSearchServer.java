@@ -38,6 +38,8 @@ public class CommonDataSearchServer extends DataSearchServer {
     @Async("taskExecutor")
     @Override
     protected Future<SearchModeData> getDataBySQLSever(String sql) throws InterruptedException, SQLException {
+
+        //获取数据源连接
         Connection connection = null;
         if(dataSource != null) {
             connection = dataSource.getConnection();
@@ -50,6 +52,8 @@ public class CommonDataSearchServer extends DataSearchServer {
         }
         int code = 0;
         List<Map<String, Object>> data = new ArrayList<>();
+
+        //执行sql获取数据
         PreparedStatement pstmt;
         try {
             pstmt = connection.prepareStatement(sql);

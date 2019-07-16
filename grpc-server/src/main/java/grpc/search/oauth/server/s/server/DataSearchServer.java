@@ -23,12 +23,6 @@ public abstract class DataSearchServer{
     protected Connection connection;
 
 
-    /**
-     * sql过滤器
-     */
-    protected FilteSqlService filteDataSearch;
-
-
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -37,14 +31,8 @@ public abstract class DataSearchServer{
         this.connection = connection;
     }
 
-    public void setFilteDataSearch(FilteSqlService filteDataSearch) {
-        this.filteDataSearch = filteDataSearch;
-    }
 
     public Future<SearchModeData> getDataBySql(String sql) throws InterruptedException, SQLException {
-        if(filteDataSearch != null) {
-            filteDataSearch.filteDataSearch(sql);
-        }
         return getDataBySQLSever(sql);
     }
 

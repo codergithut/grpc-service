@@ -12,6 +12,9 @@ import java.util.Map;
  */
 public class CheckSqlPermissionStream {
 
+    /**
+     * 注册权限检查项
+     */
     Map<String, CheckSqlPermission> checkSqlPermissions = new HashMap<>();
 
 

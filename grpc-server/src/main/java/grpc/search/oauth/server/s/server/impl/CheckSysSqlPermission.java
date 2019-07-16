@@ -23,6 +23,12 @@ public class CheckSysSqlPermission implements CheckSqlPermission{
     private final String SYSCONFIGSEARCH = "SELECT priv_type, priv_value FROM docker.sys_role_data " +
             "where role_id = '?' and target_name = '#';";
 
+    /**
+     * 同上
+     * @param sqlSearchFields
+     * @param role_id
+     * @return
+     */
     @Override
     public boolean checkSqlPermission(List<SqlSearchField> sqlSearchFields, String role_id) {
         PreparedStatement pstmt;
