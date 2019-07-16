@@ -134,17 +134,6 @@ public class BeanConfig {
     }
 
 
-    @Bean(name = "postgre")
-    public HikariDataSource initPostgreDataBase() {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUsername("pgadmin");
-        dataSource.setPassword("6lcePSo4ypUwe0xB");
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSource.setAutoCommit(false);
-        return dataSource;
-    }
-
     @Bean
     public MulDataSourceManage getDataSearchServerManageFactory() {
         MulDataSourceManage mulDataSourceManage = new MulDataSourceManage();

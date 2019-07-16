@@ -53,7 +53,7 @@ public class SearchDataClient {
         SqlRequest request = SqlRequest.newBuilder().setSql(sql)
                 .setRoleId("1")
                 .setType("IDE")
-                .setDataSourceName("mysql")
+                .setDataSourceName("mysql1")
                 .setToken(token).setName("client1")
                 .build();
         ServerReply response = serverBlockingStub.getDataBySql(request);

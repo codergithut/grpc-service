@@ -18,10 +18,11 @@ import java.util.Arrays;
 
 public class ResourceIsolate {
 
-    public static String getQueueName() throws Exception {
+
+    public static String getQueueName(String url) throws Exception {
 
         URL urlScheduler =
-                new URL("http://30.99.137.101:8088/ws/v1/cluster/scheduler");
+                new URL(url);
 
         URLConnection urlConnection = urlScheduler.openConnection();
 
@@ -79,8 +80,6 @@ public class ResourceIsolate {
 //            System.out.println(queueInfos[j]);
 //        }
 
-        System.out.println(queueInfos[0].queueName);
-
         return queueInfos[0].queueName;
 
     }
@@ -123,14 +122,14 @@ public class ResourceIsolate {
         return list;
     }
 
-    public static Connection getConnection(HiveConnectinInfo hiveConnectinInfo) {
+    public static Connection getConnection(HiveConnectinInfo hiveConnectinInfo, String queueUrl) {
 
         String driverName = hiveConnectinInfo.getDriveName();
         String url = hiveConnectinInfo.getUrl();
 
         String queueName = "";
         try {
-            queueName = getQueueName();
+            queueName = getQueueName(queueUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }

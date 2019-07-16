@@ -28,6 +28,9 @@ import java.util.concurrent.TimeoutException;
 public class GetDataBySqlServer
         extends GetDataBySqlGrpc.GetDataBySqlImplBase {
 
+    @Value("${queue.url}")
+    private String queueUrl;
+
     //缓存接口这里是LoadingCache，LoadingCache在缓存项不存在时可以自动加载缓存
     Cache<String,String> searchCache
             //CacheBuilder的构造函数是私有的，只能通过其静态方法newBuilder()来获得CacheBuilder的实例
@@ -117,7 +120,7 @@ public class GetDataBySqlServer
                 writeResponseMessage(responseObserver, "can not find connection", messageCode, request.getSql());
                 return ;
             }
-            dataSearchServer.setConnection(ResourceIsolate.getConnection(hiveConnectinInfo));
+            dataSearchServer.setConnection(ResourceIsolate.getConnection(hiveConnectinInfo, queueUrl));
         }
 
 
