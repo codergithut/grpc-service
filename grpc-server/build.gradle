@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'maven'
+}
+group 'grpc-service'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+
+    compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.1.2'
+    compile group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.6'
+
+    compile group: 'io.grpc', name: 'grpc-netty', version: '1.9.1'
+    compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.9.1'
+    compile group: 'io.grpc', name: 'grpc-stub', version: '1.9.1'
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.6.1'
+
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.58'
+    compile group: 'com.alibaba', name: 'druid', version: '1.1.17'
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.1.8.RELEASE'
+    compile group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.6.1'
+    compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
+}
+
+
+install {
+    repositories.mavenInstaller {
+        pom.version =  project.version
+        pom.artifactId = 'grpc-server'
+        pom.groupId = project.group
+    }
+}
+
+task "create-dirs"<<
+        {
+            sourceSets*.java.srcDirs*.each {it.mkdirs() }
+            sourceSets*.resources.srcDirs*.each {it.mkdirs() }
+        }
+
+task getHomeDir << {
+    println gradle.gradleHomeDir
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'grpc.search.oauth.server.s.ServerApp'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}

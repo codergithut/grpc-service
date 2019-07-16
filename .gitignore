@@ -1,0 +1,5 @@
+*.class
+.idea
+.gradle
+grpc-server/build
+grpc-client/build
