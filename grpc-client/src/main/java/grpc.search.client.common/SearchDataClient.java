@@ -42,7 +42,7 @@ public class SearchDataClient {
         server_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    private String getDataByServer(String sql) {
+    private String getDataByServer(String[] args) {
         String token = "5550ea50-f129-4ce0-80e0-3a0d7dadf8b3";
         if(server_channel == null) {
             server_channel = ManagedChannelBuilder.forAddress("127.0.0.1", 3000)
@@ -50,10 +50,10 @@ public class SearchDataClient {
                     .build();
             serverBlockingStub = GetDataBySqlGrpc.newBlockingStub(server_channel);
         }
-        SqlRequest request = SqlRequest.newBuilder().setSql(sql)
+        SqlRequest request = SqlRequest.newBuilder().setSql(args[0])
                 .setRoleId("1")
                 .setType("IDE")
-                .setDataSourceName("mysql1")
+                .setDataSourceName(args[1])
                 .setToken(token).setName("client1")
                 .build();
         ServerReply response = serverBlockingStub.getDataBySql(request);
@@ -65,7 +65,7 @@ public class SearchDataClient {
         SearchDataClient searchDataClient = new SearchDataClient();
 
         for(int i = 0; i < 100; i++) {
-            System.out.println(searchDataClient.getDataByServer("select * from docker.test"));
+            System.out.println(searchDataClient.getDataByServer(args));
             Thread.sleep(100);
         }
         searchDataClient.shutdown();
