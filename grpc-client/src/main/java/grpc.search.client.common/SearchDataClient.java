@@ -14,31 +14,12 @@ import java.util.concurrent.TimeUnit;
  */
 public class SearchDataClient {
 
-    private final Integer discoveryPort = 3001;
-    private final Integer oauthPort = 3002;
-    private final String url = "127.0.0.1";
-
-    private final ManagedChannel discovery_channel;
-
-    private final ManagedChannel oauth_channel;
-
     private ManagedChannel server_channel;
 
     private GetDataBySqlGrpc.GetDataBySqlBlockingStub serverBlockingStub;
 
 
-    public SearchDataClient(){
-        discovery_channel = ManagedChannelBuilder.forAddress(url, discoveryPort)
-                .usePlaintext(true)
-                .build();
-        oauth_channel = ManagedChannelBuilder.forAddress(url, oauthPort)
-                .usePlaintext(true)
-                .build();
-    }
-
-
     public void shutdown() throws InterruptedException {
-        discovery_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
         server_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
