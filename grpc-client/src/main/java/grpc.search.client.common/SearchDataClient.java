@@ -23,7 +23,7 @@ public class SearchDataClient {
         server_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    private String getDataByServer(ClientInfo clientInfo) {
+    public String getDataByServer(ClientInfo clientInfo) {
         if(server_channel == null) {
             server_channel = ManagedChannelBuilder.forAddress(clientInfo.getServerIp(), clientInfo.getPort())
                     .usePlaintext(true)
