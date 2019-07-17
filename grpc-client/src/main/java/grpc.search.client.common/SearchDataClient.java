@@ -64,11 +64,11 @@ public class SearchDataClient {
         SearchDataClient searchDataClient = new SearchDataClient();
         ClientInfo clientInfo = new ClientInfo();
         clientInfo.setRoleId("1");
-        clientInfo.setDataSourceName("mysql1");
+        clientInfo.setDataSourceName(args[0]);
         clientInfo.setClientName("client1");
         clientInfo.setToken("5550ea50-f129-4ce0-80e0-3a0d7dadf8b3");
         clientInfo.setType("IDE");
-        clientInfo.setSql("select * from docker.test");
+        clientInfo.setSql(args[1]);
         clientInfo.setServerIp("127.0.0.1");
         clientInfo.setPort(3000);
 
