@@ -88,7 +88,8 @@ public class GetDataBySqlServer
                              StreamObserver<ServerReply> responseObserver) throws InterruptedException, ExecutionException, SQLException {
         int messageCode = ResultCode.SUCCESS;
 
-        dataSearchServer = BeanUtil.getBean(DataSearchServer.class);
+        dataSearchServer = BeanUtil.getBean("dataSearchServer");
+        System.out.println(dataSearchServer.toString());
 
         String dataSourceName = request.getDataSourceName();
 
