@@ -42,19 +42,18 @@ public class SearchDataClient {
         server_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    private String getDataByServer(String[] args) {
-        String token = "5550ea50-f129-4ce0-80e0-3a0d7dadf8b3";
+    private String getDataByServer(ClientInfo clientInfo) {
         if(server_channel == null) {
-            server_channel = ManagedChannelBuilder.forAddress("127.0.0.1", 3000)
+            server_channel = ManagedChannelBuilder.forAddress(clientInfo.getServerIp(), clientInfo.getPort())
                     .usePlaintext(true)
                     .build();
             serverBlockingStub = GetDataBySqlGrpc.newBlockingStub(server_channel);
         }
-        SqlRequest request = SqlRequest.newBuilder().setSql(args[0])
-                .setRoleId("1")
-                .setType("IDE")
-                .setDataSourceName(args[1])
-                .setToken(token).setName("client1")
+        SqlRequest request = SqlRequest.newBuilder().setSql(clientInfo.getSql())
+                .setRoleId(clientInfo.getRoleId())
+                .setType(clientInfo.getType())
+                .setDataSourceName(clientInfo.getDataSourceName())
+                .setToken(clientInfo.getToken()).setName(clientInfo.getClientName())
                 .build();
         ServerReply response = serverBlockingStub.getDataBySql(request);
         return response.getMessage();
@@ -63,9 +62,19 @@ public class SearchDataClient {
     //你好
     public static void main(String[] args) throws InterruptedException {
         SearchDataClient searchDataClient = new SearchDataClient();
+        ClientInfo clientInfo = new ClientInfo();
+        clientInfo.setRoleId("1");
+        clientInfo.setDataSourceName("mysql1");
+        clientInfo.setClientName("client1");
+        clientInfo.setToken("5550ea50-f129-4ce0-80e0-3a0d7dadf8b3");
+        clientInfo.setType("IDE");
+        clientInfo.setSql("select * from docker.test");
+        clientInfo.setServerIp("127.0.0.1");
+        clientInfo.setPort(3000);
+
 
         for(int i = 0; i < 100; i++) {
-            System.out.println(searchDataClient.getDataByServer(args));
+            System.out.println(searchDataClient.getDataByServer(clientInfo));
             Thread.sleep(100);
         }
         searchDataClient.shutdown();

@@ -19,6 +19,9 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
 
+    // https://mvnrepository.com/artifact/org.apache.hive/hive-exec
+    // compile group: 'org.apache.hive', name: 'hive-exec', version: '1.2.1'
+
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.1.2'
     compile group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'

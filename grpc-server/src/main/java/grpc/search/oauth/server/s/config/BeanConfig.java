@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 @EnableScheduling
-@PropertySource(value = { "file:config/config.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = { "classpath:config.properties" }, ignoreResourceNotFound = true)
 public class BeanConfig {
 
     /**
