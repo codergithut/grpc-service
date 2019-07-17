@@ -1,6 +1,7 @@
 package grpc.search.oauth.server.s.server;
 
-import grpc.search.oauth.server.s.grpc.mdoel.SqlRequest;
+
+import grpc.search.common.model.SqlRequest;
 
 /**
  * Created by tianjian on 2019/6/26.

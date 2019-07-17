@@ -5,7 +5,7 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
 import com.alibaba.druid.stat.TableStat;
 import com.alibaba.druid.util.JdbcConstants;
-import grpc.search.oauth.server.s.grpc.mdoel.SqlRequest;
+import grpc.search.common.model.SqlRequest;
 import grpc.search.oauth.server.s.model.SqlSearchField;
 import grpc.search.oauth.server.s.server.CheckSqlPermissionStream;
 import grpc.search.oauth.server.s.server.VerifySqlRequest;

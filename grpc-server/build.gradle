@@ -22,6 +22,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.hive/hive-exec
     // compile group: 'org.apache.hive', name: 'hive-exec', version: '1.2.1'
 
+    compile group: 'grpc-common', name: 'grpc-common', version: '1.0-SNAPSHOT'
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
     compile group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.1.2'
     compile group: 'org.apache.hive', name: 'hive-jdbc', version: '1.2.1'

@@ -15,6 +15,7 @@ dependencies {
     compile group: 'io.grpc', name: 'grpc-netty', version: '1.9.1'
     compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.9.1'
     compile group: 'io.grpc', name: 'grpc-stub', version: '1.9.1'
+    compile group: 'grpc-common', name: 'grpc-common', version: '1.0-SNAPSHOT'
     compile group: 'grpc-service', name: 'grpc-server', version: '1.0-SNAPSHOT'
 }
 

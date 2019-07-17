@@ -1,8 +1,8 @@
 package grpc.search.oauth.server.s.grpc.service;
 
-import grpc.search.oauth.server.s.grpc.mdoel.ServerReply;
-import grpc.search.oauth.server.s.grpc.mdoel.SqlRequest;
-import grpc.search.oauth.server.s.grpc.mdoel.SqlServerProto;
+import grpc.search.common.model.ServerReply;
+import grpc.search.common.model.SqlRequest;
+import grpc.search.common.model.SqlServerProto;
 
 import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;

@@ -2,19 +2,18 @@ package grpc.search.oauth.server.s.server;
 
 import com.google.common.cache.*;
 import com.zaxxer.hikari.HikariDataSource;
+import grpc.search.common.model.ServerReply;
+import grpc.search.common.model.SqlRequest;
 import grpc.search.oauth.server.s.config.ResultCode;
-import grpc.search.oauth.server.s.grpc.mdoel.SqlRequest;
 import grpc.search.oauth.server.s.grpc.service.GetDataBySqlGrpc;
 import grpc.search.oauth.server.s.model.CacheModel;
 import grpc.search.oauth.server.s.model.SearchModeData;
-import grpc.search.oauth.server.s.grpc.mdoel.ServerReply;
 import grpc.search.oauth.server.s.util.BeanUtil;
 import grpc.search.oauth.server.s.util.HiveConnectinInfo;
 import grpc.search.oauth.server.s.util.ResourceIsolate;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -182,7 +181,7 @@ public class GetDataBySqlServer
      * @param responseObserver
      * @param message
      */
-    public void writeResponseMessage(StreamObserver<ServerReply> responseObserver,String message,
+    public void writeResponseMessage(StreamObserver<ServerReply> responseObserver, String message,
                                      int messageCode, String sql) {
         //todo 异步插入数据
         //给客户端返回值
