@@ -5,6 +5,7 @@ import grpc.search.oauth.server.s.config.ResultCode;
 import grpc.search.oauth.server.s.model.SearchModeData;
 import grpc.search.oauth.server.s.server.DataSearchServer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;

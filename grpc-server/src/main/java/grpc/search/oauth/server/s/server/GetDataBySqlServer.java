@@ -8,11 +8,13 @@ import grpc.search.oauth.server.s.grpc.service.GetDataBySqlGrpc;
 import grpc.search.oauth.server.s.model.CacheModel;
 import grpc.search.oauth.server.s.model.SearchModeData;
 import grpc.search.oauth.server.s.grpc.mdoel.ServerReply;
+import grpc.search.oauth.server.s.util.BeanUtil;
 import grpc.search.oauth.server.s.util.HiveConnectinInfo;
 import grpc.search.oauth.server.s.util.ResourceIsolate;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -74,7 +76,6 @@ public class GetDataBySqlServer
     @Autowired
     private MulDataSourceManage mulDataSourceManage;
 
-    @Autowired
     private DataSearchServer dataSearchServer;
 
     /**
@@ -86,6 +87,8 @@ public class GetDataBySqlServer
     public void getDataBySql(SqlRequest request,
                              StreamObserver<ServerReply> responseObserver) throws InterruptedException, ExecutionException, SQLException {
         int messageCode = ResultCode.SUCCESS;
+
+        dataSearchServer = BeanUtil.getBean(DataSearchServer.class);
 
         String dataSourceName = request.getDataSourceName();
 

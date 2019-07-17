@@ -7,13 +7,12 @@ import grpc.search.oauth.server.s.grpc.server.MyServerInterceptor;
 import grpc.search.oauth.server.s.server.*;
 import grpc.search.oauth.server.s.server.impl.*;
 import grpc.search.oauth.server.s.task.TaskServer;
+import grpc.search.oauth.server.s.util.BeanUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -117,6 +116,11 @@ public class BeanConfig {
         return rateLimiter;
     }
 
+    @Bean
+    public BeanUtil getBeanUtil() {
+        return new BeanUtil();
+    }
+
 
     @Bean
     public MulDataSourceManage getDataSearchServerManageFactory() {
@@ -126,7 +130,8 @@ public class BeanConfig {
         return mulDataSourceManage;
     }
 
-    @Bean
+    @Bean("dataSearchServer")
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public DataSearchServer getCommonDataSearchServer() {
         return new CommonDataSearchServer();
     }
