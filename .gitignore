@@ -3,4 +3,5 @@
 .gradle
 grpc-server/build
 grpc-client/build
+common/build
 build
