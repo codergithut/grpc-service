@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':grpc-server')
+    compile project(':common')
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'io.grpc', name: 'grpc-netty', version: '1.9.1'
     compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.9.1'

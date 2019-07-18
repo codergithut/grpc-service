@@ -3,7 +3,7 @@ package grpc.search.oauth.server.s.server;
 import com.google.common.util.concurrent.RateLimiter;
 import grpc.search.common.model.ServerReply;
 import grpc.search.common.model.SqlRequest;
-import grpc.search.oauth.server.s.grpc.service.GetDataBySqlGrpc;
+import grpc.search.common.service.GetDataBySqlGrpc;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 

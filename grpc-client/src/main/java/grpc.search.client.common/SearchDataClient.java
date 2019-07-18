@@ -2,7 +2,7 @@ package grpc.search.client.common;
 
 import grpc.search.common.model.ServerReply;
 import grpc.search.common.model.SqlRequest;
-import grpc.search.oauth.server.s.grpc.service.GetDataBySqlGrpc;
+import grpc.search.common.service.GetDataBySqlGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 

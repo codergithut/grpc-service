@@ -1,8 +1,9 @@
-package grpc.search.oauth.server.s.grpc.service;
+package grpc.search.common.service;
 
 import grpc.search.common.model.ServerReply;
 import grpc.search.common.model.SqlRequest;
 import grpc.search.common.model.SqlServerProto;
+import io.grpc.stub.ClientCalls;
 
 import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
@@ -144,7 +145,7 @@ public final class GetDataBySqlGrpc {
      */
     public void getDataBySql(SqlRequest request,
         io.grpc.stub.StreamObserver<ServerReply> responseObserver) {
-      asyncUnaryCall(
+      ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetDataBySqlMethod(), getCallOptions()), request, responseObserver);
     }
   }
