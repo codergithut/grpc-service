@@ -17,7 +17,7 @@ import java.util.List;
 public class CheckIDESqlPermission implements CheckSqlPermission {
 
     @Autowired
-    @Qualifier("mysqlDataSource")
+    @Qualifier("mysqlIDEDataSource")
     private DataSource dataSource;
 
     private final String IDESEARCH = "select priv_value from ide as a where (a.tbl_name like '?%' or a.tbl_name = '?.*')" +

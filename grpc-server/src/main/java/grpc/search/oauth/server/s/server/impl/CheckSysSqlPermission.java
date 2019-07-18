@@ -17,7 +17,7 @@ import java.util.List;
 public class CheckSysSqlPermission implements CheckSqlPermission{
 
     @Autowired
-    @Qualifier("mysqlDataSource")
+    @Qualifier("mysqlIDEDataSource")
     private DataSource dataSource;
 
     private final String SYSCONFIGSEARCH = "SELECT priv_type, priv_value FROM docker.sys_role_data " +

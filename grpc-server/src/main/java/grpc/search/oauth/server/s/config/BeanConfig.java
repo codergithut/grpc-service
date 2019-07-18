@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.*;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -30,8 +29,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 @EnableScheduling
-@PropertySource({"${SYS_PROP}/config/config.properties"})
-//@PropertySource("classpath:config.properties")
+//@PropertySource({"${SYS_PROP}/config/config.properties"})
+@PropertySource("classpath:config.properties")
 public class BeanConfig {
 
     /**
@@ -86,6 +85,26 @@ public class BeanConfig {
         dataSource.setUsername(userName);
         dataSource.setPassword(password);
         dataSource.setJdbcUrl(url);
+        dataSource.setMaximumPoolSize(30);
+        return dataSource;
+    }
+
+    @Value("${mysql.ide.username}")
+    private String IdeUserName;
+
+    @Value("${mysql.ide.password}")
+    private String IdePassword;
+
+    @Value("${mysql.ide.url}")
+    private String IdeUrl;
+
+    @Bean(name = "mysqlIDEDataSource")
+    public DataSource getIDEDataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(driveName);
+        dataSource.setUsername(IdeUserName);
+        dataSource.setPassword(IdePassword);
+        dataSource.setJdbcUrl(IdeUrl);
         dataSource.setMaximumPoolSize(30);
         return dataSource;
     }
