@@ -65,7 +65,7 @@ task copyLibs(type: Copy, dependsOn: 'jar') {
 
 task copyConfig(type: Copy) {
     from('src/main/resources')
-    into('build/package/bin/config')
+    into('build/package/config')
 }
 
 task copyBin(type: Copy) {

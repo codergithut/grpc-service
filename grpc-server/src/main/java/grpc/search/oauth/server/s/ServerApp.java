@@ -2,8 +2,9 @@ package grpc.search.oauth.server.s;
 
 import grpc.search.oauth.server.s.grpc.server.GrpcServer;
 import grpc.search.oauth.server.s.config.BeanConfig;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.Properties;
 
 
 /**
@@ -11,11 +12,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class ServerApp {
     public static void main(String[] args) throws Exception {
-        ApplicationContext ctx =
-                new AnnotationConfigApplicationContext(BeanConfig.class);
-
+        AnnotationConfigApplicationContext ctx =
+                new AnnotationConfigApplicationContext();
+        ctx.register(BeanConfig.class);
+        ctx.refresh();
         GrpcServer helloWorldServer = ctx.getBean(GrpcServer.class);
         helloWorldServer.startServer();
-
     }
 }

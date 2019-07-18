@@ -1,5 +1,7 @@
 package grpc.search.oauth.server.s.config;
 
+import com.alibaba.druid.support.logging.Log;
+import com.alibaba.druid.support.logging.LogFactory;
 import com.google.common.util.concurrent.RateLimiter;
 import com.zaxxer.hikari.HikariDataSource;
 import grpc.search.oauth.server.s.grpc.server.GrpcServer;
@@ -8,16 +10,17 @@ import grpc.search.oauth.server.s.server.*;
 import grpc.search.oauth.server.s.server.impl.*;
 import grpc.search.oauth.server.s.task.TaskServer;
 import grpc.search.oauth.server.s.util.BeanUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.*;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -27,7 +30,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @Configuration
 @EnableScheduling
-@PropertySource(value = { "classpath:config.properties" }, ignoreResourceNotFound = true)
+@PropertySource({"${SYS_PROP}/config/config.properties"})
+//@PropertySource("classpath:config.properties")
 public class BeanConfig {
 
     /**
@@ -71,6 +75,8 @@ public class BeanConfig {
     @Value("${mysql.url}")
     private String url;
 
+    @Autowired
+    private Properties properties;
 
     @Bean(name = "mysqlDataSource")
     @Primary
@@ -112,7 +118,7 @@ public class BeanConfig {
      */
     @Bean
     public RateLimiter getRateLimiter() {
-        RateLimiter rateLimiter = RateLimiter.create(permitsPerSecond);
+        RateLimiter rateLimiter = RateLimiter.create(1);
         return rateLimiter;
     }
 

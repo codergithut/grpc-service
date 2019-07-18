@@ -8,14 +8,17 @@ do
 done
 
 echo $server_dir;
-echo $CLASSPATH;
 
+cd ../
 serverpath=`pwd`
+cd bin
 
 if [ -z $SERVER_OPTS ]; then
   SERVER_OPTS=-Xmx1G
 fi
 
-java $SERVER_OPTS -cp $CLASSPATH grpc.search.oauth.server.s.ServerApp -conf $server_dir/conf $@ &
+
+java  $SERVER_OPTS -DLOG_PATH=$serverpath -DSYS_PROP=file:$serverpath -cp $CLASSPATH grpc.search.oauth.server.s.ServerApp $@&
 
 echo $! > $server_dir/grpc_currentpid
+
