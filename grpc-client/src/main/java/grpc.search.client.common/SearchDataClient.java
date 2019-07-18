@@ -22,7 +22,7 @@ public class SearchDataClient {
         server_channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    public String getDataByServer(ClientInfo clientInfo) {
+    public ResponseMessage getDataByServer(ClientInfo clientInfo) {
         if(server_channel == null) {
             server_channel = ManagedChannelBuilder.forAddress(clientInfo.getServerIp(), clientInfo.getPort())
                     .usePlaintext(true)
@@ -36,7 +36,10 @@ public class SearchDataClient {
                 .setToken(clientInfo.getToken()).setName(clientInfo.getClientName())
                 .build();
         ServerReply response = serverBlockingStub.getDataBySql(request);
-        return response.getMessage();
+        ResponseMessage responseMessage = new ResponseMessage();
+        responseMessage.setCode(response.getMessagecode());
+        responseMessage.setData(response.getMessage());
+        return responseMessage;
     }
 
     //你好
@@ -44,14 +47,13 @@ public class SearchDataClient {
         SearchDataClient searchDataClient = new SearchDataClient();
         ClientInfo clientInfo = new ClientInfo();
         clientInfo.setRoleId("1");
-        clientInfo.setDataSourceName(args[0]);
+        clientInfo.setDataSourceName("mysql1");
         clientInfo.setClientName("client1");
         clientInfo.setToken("5550ea50-f129-4ce0-80e0-3a0d7dadf8b3");
         clientInfo.setType("IDE");
-        clientInfo.setSql(args[1]);
+        clientInfo.setSql("select * from docker.test");
         clientInfo.setServerIp("127.0.0.1");
         clientInfo.setPort(3000);
-
 
         for(int i = 0; i < 100; i++) {
             System.out.println(searchDataClient.getDataByServer(clientInfo));

@@ -2,7 +2,7 @@ package grpc.search.oauth.server.s.config;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.zaxxer.hikari.HikariDataSource;
-import grpc.search.oauth.server.s.grpc.server.HelloWorldServer;
+import grpc.search.oauth.server.s.grpc.server.GrpcServer;
 import grpc.search.oauth.server.s.grpc.server.MyServerInterceptor;
 import grpc.search.oauth.server.s.server.*;
 import grpc.search.oauth.server.s.server.impl.*;
@@ -151,8 +151,8 @@ public class BeanConfig {
      * @return
      */
     @Bean
-    public HelloWorldServer getHelloWorldServer() {
-        return new HelloWorldServer();
+    public GrpcServer getHelloWorldServer() {
+        return new GrpcServer();
     }
 
     @Bean

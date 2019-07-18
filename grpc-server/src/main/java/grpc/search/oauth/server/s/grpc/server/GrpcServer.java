@@ -3,7 +3,6 @@ package grpc.search.oauth.server.s.grpc.server;
 import grpc.search.oauth.server.s.server.GetDataBySqlServerProxy;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.ServerInterceptors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class HelloWorldServer {
+public class GrpcServer {
 
     @Value("${server.port}")
     private int port;
@@ -39,7 +38,7 @@ public class HelloWorldServer {
             public void run() {
 
                 System.err.println("*** shutting down gRPC service since JVM is shutting down");
-                HelloWorldServer.this.stop();
+                GrpcServer.this.stop();
                 System.err.println("*** service shut down");
             }
         });

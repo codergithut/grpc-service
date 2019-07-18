@@ -1,6 +1,6 @@
 package grpc.search.oauth.server.s;
 
-import grpc.search.oauth.server.s.grpc.server.HelloWorldServer;
+import grpc.search.oauth.server.s.grpc.server.GrpcServer;
 import grpc.search.oauth.server.s.config.BeanConfig;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,7 +14,7 @@ public class ServerApp {
         ApplicationContext ctx =
                 new AnnotationConfigApplicationContext(BeanConfig.class);
 
-        HelloWorldServer helloWorldServer = ctx.getBean(HelloWorldServer.class);
+        GrpcServer helloWorldServer = ctx.getBean(GrpcServer.class);
         helloWorldServer.startServer();
 
     }
